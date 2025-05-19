@@ -1,0 +1,11 @@
+[submodule "lib/NuVelocity"]
+	path = lib/NuVelocity
+	url = https://github.com/frankwilco/NuVelocity.git
+
+[submodule "lib/NuVelocity.Unpacker"]
+	path = lib/NuVelocity.Unpacker
+	url = https://github.com/frankwilco/NuVelocity.Unpacker.git
+
+[submodule "lib/NuVelocity.SharpZipLib"]
+	path = lib/NuVelocity.SharpZipLib
+	url = https://github.com/frankwilco/NuVelocity.SharpZipLib.git

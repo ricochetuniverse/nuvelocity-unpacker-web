@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
+  <ItemGroup>
+    <ProjectReference Include="..\lib\NuVelocity.Unpacker\src\NuVelocity.Unpacker.csproj" />
+  </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    
+    <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
+  </PropertyGroup>
+</Project>
