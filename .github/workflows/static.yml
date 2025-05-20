@@ -38,7 +38,7 @@ jobs:
           dotnet-version: '9.0'
 
       - name: Install .NET workload
-        run: dotnet workload install wasm-tools
+        run: dotnet workload install wasm-tools-net8
 
       - name: Publish app
         run: dotnet publish -c Release src/

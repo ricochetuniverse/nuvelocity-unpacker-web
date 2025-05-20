@@ -11,7 +11,7 @@ Fork of [NuVelocity.Unpacker](https://github.com/frankwilco/NuVelocity.Unpacker)
 Install the .NET workload:
 
 ```sh
-dotnet workload install wasm-tools
+dotnet workload install wasm-tools-net8
 ```
 
 Compile the .NET app:
