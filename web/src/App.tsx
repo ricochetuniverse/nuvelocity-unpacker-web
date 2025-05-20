@@ -2,6 +2,8 @@ import {useState} from 'react';
 import useDotNet from './useDotNet';
 import useErrorDetails from './useErrorDetails';
 
+import styles from './App.module.css';
+
 function App() {
 	const {
 		dotnet,
@@ -98,7 +100,7 @@ function App() {
 							<img
 								src={'data:image/png;base64,' + img}
 								key={index}
-								style={{display: 'block'}}
+								className={styles.image}
 							/>
 						);
 					})}
