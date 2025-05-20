@@ -37,6 +37,9 @@ jobs:
         with:
           dotnet-version: '9.0'
 
+      - name: Install .NET workload
+        run: dotnet workload install wasm-tools
+
       - name: Publish app
         run: dotnet publish -c Release src/
 

@@ -8,11 +8,15 @@ Fork of [NuVelocity.Unpacker](https://github.com/frankwilco/NuVelocity.Unpacker)
 
 [Install .NET 9.0 SDK](https://dotnet.microsoft.com/en-us/download).
 
-Compile the .NET app:
+Install the .NET workload:
 
 ```sh
 dotnet workload install wasm-tools
+```
 
+Compile the .NET app:
+
+```sh
 rm -rf web/public/dotnet/
 dotnet publish -c Debug src/
 ```
