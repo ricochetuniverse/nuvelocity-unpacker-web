@@ -1,18 +1,15 @@
 using System;
 using System.Runtime.InteropServices.JavaScript;
+using System.Runtime.Versioning;
 
-Console.WriteLine("Hello, Browser!");
+return;
 
-public partial class MyClass
+public partial class Unpacker
 {
     [JSExport]
-    internal static string Greeting()
+    [SupportedOSPlatform("browser")]
+    internal static string readFile(byte[] file)
     {
-        var text = $"Hello, World! Greetings from {GetHRef()}";
-        Console.WriteLine(text);
-        return text;
+        return "Hello from readFile";
     }
-
-    [JSImport("window.location.href", "main.js")]
-    internal static partial string GetHRef();
 }
