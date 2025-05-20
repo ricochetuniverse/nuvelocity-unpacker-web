@@ -1,10 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk.WebAssembly">
   <ItemGroup>
-    <ProjectReference Include="..\lib\NuVelocity.Unpacker\src\NuVelocity.Unpacker.csproj" />
+    <!-- https://github.com/frankwilco/NuVelocity.Unpacker/blob/master/src/NuVelocity.Unpacker.csproj -->
+    <ProjectReference Include="..\lib\NuVelocity.SharpZipLib\src\ICSharpCode.SharpZipLib\ICSharpCode.SharpZipLib.csproj" />
+    <ProjectReference Include="..\lib\NuVelocity\src\Graphics\ImageSharp\NuVelocity.Graphics.ImageSharp.csproj" />
+    <ProjectReference Include="..\lib\NuVelocity\src\NuVelocity.csproj" />
   </ItemGroup>
+  
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
     
     <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
   </PropertyGroup>
