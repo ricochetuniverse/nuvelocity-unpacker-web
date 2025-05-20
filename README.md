@@ -6,14 +6,15 @@ Fork of [NuVelocity.Unpacker](https://github.com/frankwilco/NuVelocity.Unpacker)
 
 ## Development
 
-Compile the .NET app first:
+[Install .NET 9.0 SDK](https://dotnet.microsoft.com/en-us/download).
+
+Compile the .NET app:
 
 ```sh
 dotnet workload install wasm-tools
 
 rm -rf web/public/dotnet/
 dotnet publish -c Debug src/
-dotnet publish -c Release src/
 ```
 
 Then run the React web app:
@@ -22,5 +23,13 @@ Then run the React web app:
 cd web
 npm install
 npm run dev
+```
+
+To build for production:
+
+```sh
+rm -rf web/public/dotnet/
+dotnet publish -c Release src/
+
 npm run build
 ```
