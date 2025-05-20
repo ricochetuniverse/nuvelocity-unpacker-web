@@ -1,7 +1,11 @@
 body {
 	font-family: system-ui;
+	cursor: default;
 }
 
-input[type='file'] {
+label,
+button:not(:disabled),
+input[type='checkbox']:not(:disabled),
+input[type='file']:not(:disabled) {
 	cursor: pointer;
 }

@@ -2,9 +2,9 @@ import {useState} from 'react';
 import useDotNet from './useDotNet';
 import useErrorDetails from './useErrorDetails';
 
-import styles from './App.module.css';
+import ImageResults from './ImageResults';
 
-function App() {
+export default function App() {
 	const {
 		dotnet,
 		loading: isDotNetLoading,
@@ -93,21 +93,8 @@ function App() {
 			) : null}
 
 			{decodedImages.length ? (
-				<div>
-					<h2>Decoded {decodedImages.length} images:</h2>
-					{decodedImages.map((img, index) => {
-						return (
-							<img
-								src={'data:image/png;base64,' + img}
-								key={index}
-								className={styles.image}
-							/>
-						);
-					})}
-				</div>
+				<ImageResults decodedImages={decodedImages} />
 			) : null}
 		</div>
 	);
 }
-
-export default App;
