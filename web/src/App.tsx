@@ -1,29 +1,18 @@
 import {useState} from 'react';
-
-const {dotnet} = await import(
-	/* @vite-ignore */
-	new URL('/dotnet/wwwroot/_framework/dotnet.js', import.meta.url).href
-);
-
-const {getAssemblyExports, getConfig} = await dotnet
-	.withDiagnosticTracing(false)
-	.withApplicationArgumentsFromQuery()
-	.create();
-
-const {mainAssemblyName} = getConfig();
-if (!mainAssemblyName) {
-	throw new Error('Missing main assembly name');
-}
-const exports = await getAssemblyExports(mainAssemblyName);
+import useDotNet from './useDotNet';
+import useErrorDetails from './useErrorDetails';
 
 function App() {
-	const [decodedImages, setDecodedImages] = useState<string[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
+	const {
+		dotnet,
+		loading: isDotNetLoading,
+		error: isDotNetLoadingError,
+	} = useDotNet();
 
-	const [errorDetails, setErrorDetails] = useState<{
-		isError: boolean;
-		details?: Error;
-	}>({isError: false});
+	const [decodedImages, setDecodedImages] = useState<string[]>([]);
+	const [isUnpacking, setIsUnpacking] = useState(false);
+
+	const [errorDetails, setErrorDetails] = useErrorDetails();
 
 	function onFileChange(ev: React.ChangeEvent<HTMLInputElement>) {
 		const fileInput = ev.currentTarget;
@@ -39,7 +28,7 @@ function App() {
 	async function processFile(file: File) {
 		console.log('Starting...');
 
-		setIsLoading(true);
+		setIsUnpacking(true);
 		setErrorDetails({isError: false});
 		setDecodedImages([]);
 
@@ -48,44 +37,57 @@ function App() {
 		try {
 			// todo should be done in a web worker because it lags the main thread
 			const decodedImages = JSON.parse(
-				exports.Unpacker.ReadFile(bytes),
+				dotnet.Unpacker.ReadFile(bytes),
 			) as string[];
 
-			setIsLoading(false);
 			setDecodedImages(decodedImages);
-		} catch (ex) {
-			console.error(ex);
+		} catch (error) {
+			console.error(error);
 
-			setIsLoading(false);
 			setErrorDetails({
 				isError: true,
-				details: ex instanceof Error ? ex : undefined,
+				details: error instanceof Error ? error : undefined,
 			});
 		}
+
+		setIsUnpacking(false);
 	}
 
 	return (
 		<div>
 			<h1>nuvelocity-unpacker-web</h1>
 
-			<div>
-				<input type="file" onChange={onFileChange} />
-			</div>
-
-			{isLoading ? (
+			{isDotNetLoading ? (
 				<p>
 					<strong>Loading...</strong>
+				</p>
+			) : isDotNetLoadingError.isError ? (
+				<p>
+					⚠️ Oops, there was a problem loading .NET:{' '}
+					<code>{isDotNetLoadingError.details?.toString()}</code>
+				</p>
+			) : (
+				<div>
+					<input type="file" onChange={onFileChange} />
+				</div>
+			)}
+
+			{isUnpacking ? (
+				<p>
+					<strong>Decoding images...</strong>
 				</p>
 			) : null}
 
 			{errorDetails.isError ? (
-				<p>Opps, there was an error: {errorDetails.details?.toString()}</p>
+				<p>
+					⚠️ Oops, there was a problem while decoding the file:{' '}
+					<code>{errorDetails.details?.toString()}</code>
+				</p>
 			) : null}
 
 			{decodedImages.length ? (
 				<div>
-					<hr />
-					<h2>Decoded images:</h2>
+					<h2>Decoded {decodedImages.length} images:</h2>
 					{decodedImages.map((img, index) => {
 						return (
 							<img
