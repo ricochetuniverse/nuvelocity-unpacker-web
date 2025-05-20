@@ -55,7 +55,12 @@ function App() {
 
 	return (
 		<div>
-			<h1>nuvelocity-unpacker-web</h1>
+			<h1>
+				nuvelocity-unpacker-web{' '}
+				<a href="https://github.com/ricochetuniverse/nuvelocity-unpacker-web">
+					(view source code on GitHub)
+				</a>
+			</h1>
 
 			{isDotNetLoading ? (
 				<p>
