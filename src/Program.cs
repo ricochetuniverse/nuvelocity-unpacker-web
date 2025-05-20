@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices.JavaScript;
 using System.Runtime.Versioning;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using NuVelocity.Graphics;
 
 return;
@@ -25,6 +26,11 @@ public partial class Unpacker
             inputDataFile: file
         );
 
-        return JsonSerializer.Serialize(exporter.ExportData());
+        return JsonSerializer.Serialize(exporter.ExportData(), SequenceDataInfoContext.Default.ByteArrayArray);
     }
+}
+
+[JsonSerializable(typeof(byte[][]))]
+internal partial class SequenceDataInfoContext : JsonSerializerContext
+{
 }
