@@ -1,0 +1,21 @@
+{
+  "name": "@ricochetuniverse/nuvelocity-unpacker",
+  "version": "1.0.0",
+  "description": "Unpack Reflexive Sequence images using NuVelocity.Unpacker",
+  "keywords": ["reflexive", "ricochet", "ricochet infinity"],
+  "homepage": "https://github.com/ricochetuniverse/nuvelocity-unpacker-web",
+  "bugs": {
+    "url": "https://github.com/ricochetuniverse/nuvelocity-unpacker-web/issues",
+    "email": "ngyikp@gmail.com"
+  },
+  "license": "MPL-2.0",
+  "author": {
+    "name": "Ng Yik Phang (ngyikp)",
+    "email": "ngyikp@gmail.com",
+    "url": "https://ngyikp.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ricochetuniverse/nuvelocity-unpacker-web.git"
+  }
+}
