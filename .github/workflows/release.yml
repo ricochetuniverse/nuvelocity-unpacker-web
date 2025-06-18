@@ -7,9 +7,10 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
-  build:
+  publish:
     if: github.repository == 'ricochetuniverse/nuvelocity-unpacker-web'
     runs-on: ubuntu-latest
     steps:
