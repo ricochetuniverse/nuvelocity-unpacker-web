@@ -1,6 +1,6 @@
 {
   "name": "@ricochetuniverse/nuvelocity-unpacker",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Unpack Reflexive Sequence images using NuVelocity.Unpacker",
   "keywords": ["reflexive", "ricochet", "ricochet infinity"],
   "homepage": "https://github.com/ricochetuniverse/nuvelocity-unpacker-web",
