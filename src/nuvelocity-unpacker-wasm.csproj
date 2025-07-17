@@ -5,19 +5,28 @@
     <ProjectReference Include="..\lib\NuVelocity\src\Graphics\ImageSharp\NuVelocity.Graphics.ImageSharp.csproj" />
     <ProjectReference Include="..\lib\NuVelocity\src\NuVelocity.csproj" />
   </ItemGroup>
-  
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <!-- https://learn.microsoft.com/en-us/aspnet/core/client-side/dotnet-interop?view=aspnetcore-8.0#project-configuration -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
     <PublishDir>$(MSBuildProjectDirectory)/../web/public/dotnet/</PublishDir>
 
-    <!-- <RunAOTCompilation>true</RunAOTCompilation>
-    <PublishTrimmed>true</PublishTrimmed>
+    <!-- Already enabled by default -->
+    <!-- <PublishTrimmed>true</PublishTrimmed>
     <TrimMode>full</TrimMode> -->
-    
+
+    <!-- Improves performance but higher file size -->
+    <!-- <RunAOTCompilation>true</RunAOTCompilation> -->
+    <!-- Must be disabled as it breaks app if enabled -->
+    <WasmStripILAfterAOT>false</WasmStripILAfterAOT>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <InvariantTimezone>true</InvariantTimezone>
+
     <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
   </PropertyGroup>
 
