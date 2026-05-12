@@ -6,7 +6,7 @@ import useErrorDetails from './useErrorDetails';
 import ImageResults from './ImageResults';
 
 export default function App() {
-	const {getDotNet, loading: isDotNetLoading} = useDotNet(
+	const {getDotNet, loading: isDotNetLoading} = useDotNet<NuVelocityUnpacker>(
 		new URL('/dotnet/wwwroot/_framework/dotnet.js', import.meta.url).href,
 	);
 
@@ -36,7 +36,7 @@ export default function App() {
 			const bytes = new Uint8Array(await file.arrayBuffer());
 
 			// todo should be done in a web worker because it lags the main thread
-			const dotNet = (await getDotNet()) as NuVelocityUnpacker | undefined;
+			const dotNet = await getDotNet();
 			if (dotNet == null) {
 				return;
 			}

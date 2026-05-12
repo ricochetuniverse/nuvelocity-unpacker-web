@@ -1,9 +1,8 @@
 // Based from https://github.com/nbelyh/article-demo-dotnet-react-app/blob/main/src/useDotNet.ts
 
 import {useCallback, useRef, useState} from 'react';
-import type {RuntimeAPI} from '../public/dotnet/wwwroot/_framework/dotnet.js';
 
-async function loadAssembly(loaderUrl: string) {
+async function loadAssembly<AppType>(loaderUrl: string): Promise<AppType> {
 	const module: typeof import('../public/dotnet/wwwroot/_framework/dotnet.js') =
 		await import(/* @vite-ignore */ loaderUrl);
 
@@ -16,14 +15,11 @@ async function loadAssembly(loaderUrl: string) {
 		throw new Error('Missing main assembly name');
 	}
 
-	return await getAssemblyExports(mainAssemblyName);
+	return getAssemblyExports(mainAssemblyName);
 }
 
-export default function useDotNet(loaderUrl: string) {
-	// this is actually `any` :p
-	const [dotNet, setDotNet] = useState<Awaited<
-		ReturnType<RuntimeAPI['getAssemblyExports']>
-	> | null>(null);
+export default function useDotNet<AppType>(loaderUrl: string) {
+	const [dotNet, setDotNet] = useState<AppType | null>(null);
 
 	const [loading, setLoading] = useState(true);
 	const startedLoadingRef = useRef(false);
@@ -40,7 +36,7 @@ export default function useDotNet(loaderUrl: string) {
 		startedLoadingRef.current = true;
 
 		try {
-			const exports = await loadAssembly(loaderUrl);
+			const exports = await loadAssembly<AppType>(loaderUrl);
 			setDotNet(exports);
 
 			return exports;
