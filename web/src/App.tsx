@@ -1,19 +1,17 @@
 import {useState} from 'react';
+import type {NuVelocityUnpacker} from './NuVelocityUnpackerType';
 import useDotNet from './useDotNet';
 import useErrorDetails from './useErrorDetails';
 
 import ImageResults from './ImageResults';
 
 export default function App() {
-	const {
-		dotnet,
-		loading: isDotNetLoading,
-		error: isDotNetLoadingError,
-	} = useDotNet();
+	const {getDotNet, loading: isDotNetLoading} = useDotNet(
+		new URL('/dotnet/wwwroot/_framework/dotnet.js', import.meta.url).href,
+	);
 
 	const [decodedImages, setDecodedImages] = useState<string[]>([]);
 	const [isUnpacking, setIsUnpacking] = useState(false);
-
 	const [errorDetails, setErrorDetails] = useErrorDetails();
 
 	function onFileChange(ev: React.ChangeEvent<HTMLInputElement>) {
@@ -34,12 +32,17 @@ export default function App() {
 		setErrorDetails({isError: false});
 		setDecodedImages([]);
 
-		const bytes = new Uint8Array(await file.arrayBuffer());
-
 		try {
+			const bytes = new Uint8Array(await file.arrayBuffer());
+
 			// todo should be done in a web worker because it lags the main thread
+			const dotNet = (await getDotNet()) as NuVelocityUnpacker | undefined;
+			if (dotNet == null) {
+				return;
+			}
+
 			const decodedImages = JSON.parse(
-				dotnet.Unpacker.ReadFile(bytes),
+				dotNet.Unpacker.ReadFile(bytes),
 			) as string[];
 
 			setDecodedImages(decodedImages);
@@ -50,9 +53,9 @@ export default function App() {
 				isError: true,
 				details: error instanceof Error ? error : undefined,
 			});
+		} finally {
+			setIsUnpacking(false);
 		}
-
-		setIsUnpacking(false);
 	}
 
 	return (
@@ -64,25 +67,20 @@ export default function App() {
 				</a>
 			</h1>
 
-			{isDotNetLoading ? (
-				<p>
-					<strong>Loading...</strong>
-				</p>
-			) : isDotNetLoadingError.isError ? (
-				<p>
-					⚠️ Oops, there was a problem loading .NET:{' '}
-					<code>{isDotNetLoadingError.details?.toString()}</code>
-				</p>
-			) : (
-				<div>
-					<input type="file" onChange={onFileChange} />
-				</div>
-			)}
+			<div>
+				<input type="file" onChange={onFileChange} />
+			</div>
 
 			{isUnpacking ? (
-				<p>
-					<strong>Decoding images...</strong>
-				</p>
+				isDotNetLoading ? (
+					<p>
+						<strong>Loading...</strong>
+					</p>
+				) : (
+					<p>
+						<strong>Decoding images...</strong>
+					</p>
+				)
 			) : null}
 
 			{errorDetails.isError ? (
