@@ -21,7 +21,7 @@ export default function App() {
 		}
 
 		if (fileInput.files && fileInput.files[0]) {
-			processFile(fileInput.files[0]);
+			void processFile(fileInput.files[0]);
 		}
 	}
 

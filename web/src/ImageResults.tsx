@@ -31,7 +31,9 @@ export default function ImageResults({decodedImages}: Props) {
 						<>
 							<div className={styles.sequenceWrap}>
 								<div className={styles.sequenceImage}>
-									<Image base64={decodedImages[currentIndex]} />
+									{decodedImages[currentIndex] ? (
+										<Image base64={decodedImages[currentIndex]} />
+									) : null}
 								</div>
 
 								<div className={styles.sequenceNav}>
@@ -106,9 +108,9 @@ export default function ImageResults({decodedImages}: Props) {
 						</div>
 					)}
 				</>
-			) : (
+			) : decodedImages[0] ? (
 				<Image base64={decodedImages[0]} />
-			)}
+			) : null}
 		</div>
 	);
 }

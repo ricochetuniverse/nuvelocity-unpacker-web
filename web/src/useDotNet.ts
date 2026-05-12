@@ -2,20 +2,23 @@
 
 import {useCallback, useRef, useState} from 'react';
 
-async function loadAssembly<AppType>(loaderUrl: string): Promise<AppType> {
-	const module: typeof import('../public/dotnet/wwwroot/_framework/dotnet.js') =
-		await import(/* @vite-ignore */ loaderUrl);
+async function loadAssembly<AppType>(loaderUrl: string) {
+	const module = (await import(
+		/* @vite-ignore */ loaderUrl
+	)) as typeof import('../public/dotnet/wwwroot/_framework/dotnet.js');
 
-	const {getAssemblyExports, getConfig} = await module.dotnet
-		.withDiagnosticTracing(import.meta.env.DEV)
-		.create();
+	const {
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		getAssemblyExports,
+		getConfig,
+	} = await module.dotnet.withDiagnosticTracing(import.meta.env.DEV).create();
 
 	const {mainAssemblyName} = getConfig();
 	if (!mainAssemblyName) {
 		throw new Error('Missing main assembly name');
 	}
 
-	return getAssemblyExports(mainAssemblyName);
+	return getAssemblyExports(mainAssemblyName) as Promise<AppType>;
 }
 
 export default function useDotNet<AppType>(loaderUrl: string) {
