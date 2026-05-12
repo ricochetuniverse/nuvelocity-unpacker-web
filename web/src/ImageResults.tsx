@@ -1,16 +1,7 @@
 import {useState} from 'react';
 
+import Image from './Image';
 import styles from './ImageResults.module.css';
-
-function Image(props: {base64: string}) {
-	return (
-		<img
-			src={'data:image/png;base64,' + props.base64}
-			className={styles.image}
-			alt=""
-		/>
-	);
-}
 
 type Props = Readonly<{
 	decodedImages: string[];
