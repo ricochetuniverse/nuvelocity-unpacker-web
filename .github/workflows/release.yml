@@ -15,17 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # https://github.com/actions/checkout/releases/tag/v6.0.2
         with:
           submodules: true
 
-      - name: Get latest .NET SDK
-        uses: actions/setup-dotnet@v4
+      - name: Set up .NET
+        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # https://github.com/actions/setup-dotnet/releases/tag/v5.2.0
         with:
           dotnet-version: '9.0'
-
-      - name: Install .NET workload
-        run: dotnet workload install wasm-tools-net8
+          workloads: wasm-tools-net8
 
       - name: Publish .NET app
         run: dotnet publish -c Release src/
@@ -38,14 +36,14 @@ jobs:
           cp -r web/public/dotnet/wwwroot/_framework/ npm/dotnet/
 
       - name: Create release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # https://github.com/softprops/action-gh-release/releases/tag/v3.0.0
         with:
           files: |
             dotnet-wasm.zip
 
       # npm
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # https://github.com/actions/setup-node/releases/tag/v6.4.0
         with:
           node-version: lts/*
           cache: 'npm'

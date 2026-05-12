@@ -1,51 +1,46 @@
 name: Deploy static content to GitHub Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ['master']
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow one concurrent deployment
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: 'pages'
   cancel-in-progress: true
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
-    if: github.repository == 'ricochetuniverse/nuvelocity-unpacker-web'
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # https://github.com/actions/checkout/releases/tag/v6.0.2
         with:
           submodules: true
 
-      - name: Get latest .NET SDK
-        uses: actions/setup-dotnet@v4
+      - name: Set up .NET
+        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # https://github.com/actions/setup-dotnet/releases/tag/v5.2.0
         with:
           dotnet-version: '9.0'
-
-      - name: Install .NET workload
-        run: dotnet workload install wasm-tools-net8
+          workloads: wasm-tools-net8
 
       - name: Publish .NET app
         run: dotnet publish -c Release src/
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # https://github.com/actions/setup-node/releases/tag/v6.4.0
         with:
           node-version: lts/*
           cache: 'npm'
@@ -59,14 +54,14 @@ jobs:
         run: npm run build
         working-directory: ./web
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+      - name: Set up Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # https://github.com/actions/configure-pages/releases/tag/v6.0.0
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # https://github.com/actions/upload-pages-artifact/releases/tag/v5.0.0
         with:
           path: './web/dist'
 
       - name: Deploy to Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # https://github.com/actions/deploy-pages/releases/tag/v5.0.0
