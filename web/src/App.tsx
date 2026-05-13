@@ -1,15 +1,10 @@
 import {useState} from 'react';
-import type {NuVelocityUnpacker} from './NuVelocityUnpackerType';
-import useDotNet from './useDotNet';
 import useErrorDetails from './useErrorDetails';
+import {unpack} from './worker-handler';
 
 import ImageResults from './ImageResults';
 
 export default function App() {
-	const {getDotNet, loading: isDotNetLoading} = useDotNet<NuVelocityUnpacker>(
-		new URL('/dotnet/wwwroot/_framework/dotnet.js', import.meta.url).href,
-	);
-
 	const [decodedImages, setDecodedImages] = useState<string[]>([]);
 	const [isUnpacking, setIsUnpacking] = useState(false);
 	const [errorDetails, setErrorDetails] = useErrorDetails();
@@ -35,16 +30,7 @@ export default function App() {
 		try {
 			const bytes = new Uint8Array(await file.arrayBuffer());
 
-			// todo should be done in a web worker because it lags the main thread
-			const dotNet = await getDotNet();
-			if (dotNet == null) {
-				return;
-			}
-
-			const decodedImages = JSON.parse(
-				dotNet.Unpacker.ReadFile(bytes),
-			) as string[];
-
+			const decodedImages = JSON.parse(await unpack(bytes)) as string[];
 			setDecodedImages(decodedImages);
 		} catch (error) {
 			console.error(error);
@@ -72,16 +58,16 @@ export default function App() {
 			</div>
 
 			{isUnpacking ? (
-				isDotNetLoading ? (
-					<p>
-						<strong>Loading...</strong>
-					</p>
-				) : (
-					<p>
-						<strong>Decoding images...</strong>
-					</p>
-				)
-			) : null}
+				// isDotNetLoading ? (
+				// 	<p>
+				// 		<strong>Loading...</strong>
+				// 	</p>
+				// ) : (
+				<p>
+					<strong>Decoding images...</strong>
+				</p>
+			) : // )
+			null}
 
 			{errorDetails.isError ? (
 				<p>
