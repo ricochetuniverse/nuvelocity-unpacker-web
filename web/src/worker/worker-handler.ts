@@ -1,6 +1,6 @@
 // Based on https://github.com/dotnet/blazor-samples/blob/main/10.0/DotNetOnWebWorkersReact/react/src/
 
-import type {WorkerResponses} from './WorkerMessageType';
+import type {WorkerResponses} from './WorkerMessageTypes';
 
 const messagePorts = new Map<number, (response: WorkerResponses) => void>();
 let messageNewId = 0;

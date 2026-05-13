@@ -1,12 +1,17 @@
-import type {NuVelocityUnpacker as AppExports} from './NuVelocityUnpackerType';
-import type {WorkerRequest, WorkerResponses} from './WorkerMessageType';
+import type {WorkerRequest, WorkerResponses} from './WorkerMessageTypes';
+
+type AppExports = {
+	Unpacker: {
+		ReadFile(file: Uint8Array): string;
+	};
+};
 
 let dotNet: AppExports | null = null;
 
 async function loadAssembly<AppExports>(loaderUrl: string) {
 	const module = (await import(
 		/* @vite-ignore */ loaderUrl
-	)) as typeof import('../public/dotnet/wwwroot/_framework/dotnet.js');
+	)) as typeof import('../../public/dotnet/wwwroot/_framework/dotnet.js');
 
 	const {
 		// eslint-disable-next-line @typescript-eslint/unbound-method

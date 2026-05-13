@@ -1,8 +1,8 @@
 import {useState} from 'react';
-import {unpack} from './worker-handler';
+import {unpack} from './worker/worker-handler';
+import type {WorkerStatuses} from './worker/WorkerMessageTypes';
 
 import ImageResults from './ImageResults';
-import type {WorkerStatuses} from './WorkerMessageType';
 
 export default function App() {
 	const [status, setStatus] = useState<WorkerStatuses | null>(null);
