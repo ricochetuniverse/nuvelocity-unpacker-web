@@ -3,15 +3,6 @@ import type {WorkerRequest, WorkerResponses} from './WorkerMessageType';
 
 let dotNet: AppExports | null = null;
 
-async function getDotNet(loaderUrl: string) {
-	if (dotNet) {
-		return dotNet;
-	}
-
-	dotNet = await loadAssembly(loaderUrl);
-	return dotNet;
-}
-
 async function loadAssembly<AppExports>(loaderUrl: string) {
 	const module = (await import(
 		/* @vite-ignore */ loaderUrl
@@ -37,24 +28,31 @@ async function loadAssembly<AppExports>(loaderUrl: string) {
 }
 
 async function onMessage(request: WorkerRequest) {
-	const response = (result: WorkerResponses) => {
+	const reply = (result: WorkerResponses) => {
 		self.postMessage({
 			messageId: request.messageId,
-			command: 'response',
 			result,
 		});
 	};
 
 	try {
-		const dotNet = await getDotNet(request.loaderUrl);
+		if (!dotNet) {
+			reply({status: 'LOADING'});
 
-		response({
-			decodedImagesJson: dotNet.Unpacker.ReadFile(request.bytes),
+			dotNet = await loadAssembly(request.loaderUrl);
+		}
+
+		reply({status: 'PROCESSING'});
+
+		const decodedImagesJson = dotNet.Unpacker.ReadFile(request.bytes);
+		reply({
+			status: 'FINISHED',
+			decodedImagesJson,
 		});
 	} catch (error) {
-		response({
-			isError: true,
-			errorDetails: error instanceof Error ? error.message : '',
+		reply({
+			status: 'ERROR',
+			errorDetails: error instanceof Error ? error.message : 'Unknown error',
 		});
 	}
 }

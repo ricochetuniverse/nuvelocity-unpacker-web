@@ -1,13 +1,13 @@
 import {useState} from 'react';
-import useErrorDetails from './useErrorDetails';
 import {unpack} from './worker-handler';
 
 import ImageResults from './ImageResults';
+import type {WorkerStatuses} from './WorkerMessageType';
 
 export default function App() {
+	const [status, setStatus] = useState<WorkerStatuses | null>(null);
 	const [decodedImages, setDecodedImages] = useState<string[]>([]);
-	const [isUnpacking, setIsUnpacking] = useState(false);
-	const [errorDetails, setErrorDetails] = useErrorDetails();
+	const [errorDetails, setErrorDetails] = useState<Error | null>(null);
 
 	function onFileChange(ev: React.ChangeEvent<HTMLInputElement>) {
 		const fileInput = ev.currentTarget;
@@ -23,25 +23,37 @@ export default function App() {
 	async function processFile(file: File) {
 		console.log('Starting...');
 
-		setIsUnpacking(true);
-		setErrorDetails({isError: false});
+		setStatus('LOADING');
 		setDecodedImages([]);
+		setErrorDetails(null);
 
-		try {
-			const bytes = new Uint8Array(await file.arrayBuffer());
+		const bytes = new Uint8Array(await file.arrayBuffer());
 
-			const decodedImages = JSON.parse(await unpack(bytes)) as string[];
-			setDecodedImages(decodedImages);
-		} catch (error) {
-			console.error(error);
+		unpack(bytes, (response) => {
+			setStatus(response.status);
 
-			setErrorDetails({
-				isError: true,
-				details: error instanceof Error ? error : undefined,
-			});
-		} finally {
-			setIsUnpacking(false);
-		}
+			switch (response.status) {
+				case 'LOADING':
+				case 'PROCESSING':
+					break;
+
+				case 'FINISHED': {
+					const decodedImages = JSON.parse(
+						response.decodedImagesJson,
+					) as string[];
+					setDecodedImages(decodedImages);
+					break;
+				}
+
+				case 'ERROR':
+					console.error(response.errorDetails);
+					setErrorDetails(new Error(response.errorDetails));
+					break;
+
+				default:
+					break;
+			}
+		});
 	}
 
 	return (
@@ -57,22 +69,22 @@ export default function App() {
 				<input type="file" onChange={onFileChange} />
 			</div>
 
-			{isUnpacking ? (
-				// isDotNetLoading ? (
-				// 	<p>
-				// 		<strong>Loading...</strong>
-				// 	</p>
-				// ) : (
+			{status === 'LOADING' ? (
+				<p>
+					<strong>Loading...</strong>
+				</p>
+			) : status === 'PROCESSING' ? (
 				<p>
 					<strong>Decoding images...</strong>
 				</p>
-			) : // )
-			null}
-
-			{errorDetails.isError ? (
+			) : status === 'ERROR' ? (
 				<p>
-					⚠️ Oops, there was a problem while decoding the file:{' '}
-					<code>{errorDetails.details?.toString()}</code>
+					⚠️ Oops, there was a problem while decoding the file
+					{errorDetails ? (
+						<>
+							: <code>{errorDetails.message}</code>
+						</>
+					) : null}
 				</p>
 			) : null}
 

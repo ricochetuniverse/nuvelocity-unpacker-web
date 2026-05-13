@@ -1,15 +1,20 @@
 export type WorkerRequest = {
 	messageId: number;
-	command: 'unpack';
 	loaderUrl: string;
 	bytes: Uint8Array<ArrayBuffer>;
 };
 
+export type WorkerStatuses = 'LOADING' | 'PROCESSING' | 'FINISHED' | 'ERROR';
+
 export type WorkerResponses =
 	| {
+			status: Exclude<WorkerStatuses, 'FINISHED' | 'ERROR'>;
+	  }
+	| {
+			status: 'FINISHED';
 			decodedImagesJson: string;
 	  }
 	| {
-			isError: true;
+			status: 'ERROR';
 			errorDetails: string;
 	  };

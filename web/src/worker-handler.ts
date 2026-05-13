@@ -2,13 +2,7 @@
 
 import type {WorkerResponses} from './WorkerMessageType';
 
-const pendingRequests = new Map<
-	number,
-	{
-		resolve: (decodedImagesJson: string) => void;
-		reject: (error: Error) => void;
-	}
->();
+const messagePorts = new Map<number, (response: WorkerResponses) => void>();
 let messageNewId = 0;
 
 const worker = new Worker(new URL('./worker-background.ts', import.meta.url), {
@@ -17,49 +11,39 @@ const worker = new Worker(new URL('./worker-background.ts', import.meta.url), {
 
 worker.addEventListener(
 	'message',
-	(
-		ev: MessageEvent<{
-			messageId: number;
-			command: 'response';
-			result: WorkerResponses;
-		}>,
-	) => {
-		const request = pendingRequests.get(ev.data.messageId);
-		if (!request) {
+	({
+		data: response,
+	}: MessageEvent<{
+		messageId: number;
+		result: WorkerResponses;
+	}>) => {
+		const port = messagePorts.get(response.messageId);
+		if (!port) {
 			return;
 		}
-		pendingRequests.delete(ev.data.messageId);
+		port(response.result);
 
-		const response = ev.data.result;
-		if ('decodedImagesJson' in response) {
-			request.resolve(response.decodedImagesJson);
-			return;
+		if (
+			response.result.status === 'FINISHED' ||
+			response.result.status === 'ERROR'
+		) {
+			messagePorts.delete(response.messageId);
 		}
-
-		if ('isError' in response) {
-			request.reject(new Error(response.errorDetails));
-			return;
-		}
-
-		request.reject(new Error('Unknown response from web worker'));
 	},
 	false,
 );
 
-export function unpack(bytes: Uint8Array<ArrayBuffer>) {
+export function unpack(
+	bytes: Uint8Array<ArrayBuffer>,
+	onStatusChanged: (response: WorkerResponses) => void,
+) {
 	messageNewId += 1;
+	messagePorts.set(messageNewId, onStatusChanged);
 
-	return new Promise<string>((resolve, reject) => {
-		pendingRequests.set(messageNewId, {resolve, reject});
-
-		worker.postMessage({
-			messageId: messageNewId,
-			command: 'unpack',
-			loaderUrl: new URL(
-				'/dotnet/wwwroot/_framework/dotnet.js',
-				import.meta.url,
-			).href,
-			bytes,
-		});
+	worker.postMessage({
+		messageId: messageNewId,
+		loaderUrl: new URL('/dotnet/wwwroot/_framework/dotnet.js', import.meta.url)
+			.href,
+		bytes,
 	});
 }
