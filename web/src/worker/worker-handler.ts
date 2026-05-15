@@ -5,38 +5,50 @@ import type {WorkerResponses} from './WorkerMessageTypes';
 const messagePorts = new Map<number, (response: WorkerResponses) => void>();
 let messageNewId = 0;
 
-const worker = new Worker(new URL('./worker-background.ts', import.meta.url), {
-	type: 'module',
-});
+let worker: Worker | null = null;
 
-worker.addEventListener(
-	'message',
-	({
-		data: response,
-	}: MessageEvent<{
-		messageId: number;
-		result: WorkerResponses;
-	}>) => {
-		const port = messagePorts.get(response.messageId);
-		if (!port) {
-			return;
-		}
-		port(response.result);
+function startWorker() {
+	if (worker) {
+		return worker;
+	}
 
-		if (
-			response.result.status === 'FINISHED' ||
-			response.result.status === 'ERROR'
-		) {
-			messagePorts.delete(response.messageId);
-		}
-	},
-	false,
-);
+	worker = new Worker(new URL('./worker-background', import.meta.url), {
+		type: 'module',
+	});
+
+	worker.addEventListener(
+		'message',
+		({
+			data: response,
+		}: MessageEvent<{
+			messageId: number;
+			result: WorkerResponses;
+		}>) => {
+			const port = messagePorts.get(response.messageId);
+			if (!port) {
+				return;
+			}
+			port(response.result);
+
+			if (
+				response.result.status === 'FINISHED' ||
+				response.result.status === 'ERROR'
+			) {
+				messagePorts.delete(response.messageId);
+			}
+		},
+		false,
+	);
+
+	return worker;
+}
 
 export function unpack(
 	bytes: Uint8Array<ArrayBuffer>,
 	onStatusChanged: (response: WorkerResponses) => void,
 ) {
+	const worker = startWorker();
+
 	messageNewId += 1;
 	messagePorts.set(messageNewId, onStatusChanged);
 
