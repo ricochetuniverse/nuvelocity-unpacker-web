@@ -10,7 +10,7 @@ public partial class Unpacker
 {
     [JSExport]
     [SupportedOSPlatform("browser")]
-    internal static string ReadFile(byte[] file)
+    public static string ReadFile(byte[] file)
     {
         ImageExporter exporter = new ImageExporter(
             format: EncoderFormat.Mode3,

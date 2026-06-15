@@ -29,11 +29,18 @@ npm install
 npm run dev
 ```
 
-To build for production:
+## Build for production
 
 ```sh
 rm -rf web/public/dotnet/
 dotnet publish -c Release src/
 
+cd web
 npm run build
+```
+
+## Testing
+
+```sh
+dotnet test -c Debug UnpackerTests/
 ```
