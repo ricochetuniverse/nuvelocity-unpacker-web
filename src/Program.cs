@@ -10,15 +10,35 @@ public partial class Unpacker
 {
     [JSExport]
     [SupportedOSPlatform("browser")]
+    [Obsolete("Use ReadSequence instead")]
     public static string ReadFile(byte[] file)
     {
-        ImageExporter exporter = new ImageExporter(
-            format: EncoderFormat.Mode3,
-            overrideBlackBlending: false,
-            inputDataFile: file
-        );
+        return ReadSequence(file);
+    }
 
-        return JsonSerializer.Serialize(exporter.ExportData(), SequenceDataInfoContext.Default.ByteArrayArray);
+    [JSExport]
+    [SupportedOSPlatform("browser")]
+    public static string ReadSequence(byte[] file)
+    {
+        return HandleImageType(file, ImageType.SEQUENCE);
+    }
+
+    [JSExport]
+    [SupportedOSPlatform("browser")]
+    public static string ReadFrame(byte[] file)
+    {
+        return HandleImageType(file, ImageType.FRAME);
+    }
+
+    private static string HandleImageType(byte[] file, ImageType imageType)
+    {
+        ImageExporter exporter = new ImageExporter(
+           format: EncoderFormat.Mode3,
+           overrideBlackBlending: false,
+           inputDataFile: file
+       );
+
+        return JsonSerializer.Serialize(exporter.ExportData(imageType), SequenceDataInfoContext.Default.ByteArrayArray);
     }
 }
 

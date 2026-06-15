@@ -1,5 +1,6 @@
 // Based on https://github.com/dotnet/blazor-samples/blob/main/10.0/DotNetOnWebWorkersReact/react/src/
 
+import type {ImageTypeEnum} from '../ImageType';
 import type {WorkerResponses} from './WorkerMessageTypes';
 
 const messagePorts = new Map<number, (response: WorkerResponses) => void>();
@@ -44,6 +45,7 @@ function startWorker() {
 }
 
 export function unpack(
+	imageType: ImageTypeEnum,
 	bytes: Uint8Array<ArrayBuffer>,
 	onStatusChanged: (response: WorkerResponses) => void,
 ) {
@@ -56,6 +58,7 @@ export function unpack(
 		messageId: messageNewId,
 		loaderUrl: new URL('/dotnet/wwwroot/_framework/dotnet.js', import.meta.url)
 			.href,
+		imageType,
 		bytes,
 	});
 }

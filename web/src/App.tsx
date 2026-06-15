@@ -3,6 +3,20 @@ import {unpack} from './worker/worker-handler';
 import type {WorkerStatuses} from './worker/WorkerMessageTypes';
 
 import ImageResults from './ImageResults';
+import {ImageType} from './ImageType';
+
+function getImageType(fileName: string) {
+	const fileNameLowercase = fileName.toLowerCase();
+	if (fileNameLowercase.endsWith('.sequence')) {
+		return ImageType.SEQUENCE;
+	} else if (fileNameLowercase.endsWith('.frame')) {
+		return ImageType.FRAME;
+	}
+
+	throw new Error(
+		'Unknown image type, only .Sequence and .Frame are supported.',
+	);
+}
 
 export default function App() {
 	const [status, setStatus] = useState<WorkerStatuses | null>(null);
@@ -29,7 +43,7 @@ export default function App() {
 
 		const bytes = new Uint8Array(await file.arrayBuffer());
 
-		unpack(bytes, (response) => {
+		unpack(getImageType(file.name), bytes, (response) => {
 			setStatus(response.status);
 
 			switch (response.status) {
