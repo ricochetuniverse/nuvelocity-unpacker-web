@@ -52,5 +52,5 @@ jobs:
           package-manager-cache: false # never use caching in release builds
 
       - name: Publish
-        run: npm stage publish
+        run: npm publish
         working-directory: ./npm
