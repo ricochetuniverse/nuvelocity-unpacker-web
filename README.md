@@ -43,4 +43,9 @@ npm run build
 
 ```sh
 dotnet test -c Debug UnpackerTests/
+
+cd web
+npm run tsc -- -b
+npm run lint
+npm run prettier -- -c
 ```
