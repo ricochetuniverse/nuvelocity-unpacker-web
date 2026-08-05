@@ -1,12 +1,18 @@
 {
   "name": "nuvelocity-unpacker-web",
+  "homepage": "https://github.com/ricochetuniverse/nuvelocity-unpacker-web",
   "bugs": {
+    "url": "https://github.com/ricochetuniverse/nuvelocity-unpacker-web/issues",
     "email": "ngyikp@gmail.com"
   },
   "author": {
     "name": "Ng Yik Phang (ngyikp)",
     "email": "ngyikp@gmail.com",
     "url": "https://ngyikp.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ricochetuniverse/nuvelocity-unpacker-web.git"
   },
   "private": true,
   "license": "MPL-2.0",
@@ -15,7 +21,7 @@
   },
   "type": "module",
   "scripts": {
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "dev": "vite",
     "lint": "eslint .",
     "prettier": "prettier .",
