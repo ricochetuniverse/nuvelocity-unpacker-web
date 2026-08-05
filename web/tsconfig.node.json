@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-		"target": "ES2022",
+		"target": "ES2023",
 		"module": "ESNext",
 		"lib": ["ES2023"],
 		"types": ["node"],
@@ -9,7 +9,6 @@
 		"checkJs": true,
 
 		/* Bundler mode */
-		"moduleResolution": "bundler",
 		"allowImportingTsExtensions": true,
 		"verbatimModuleSyntax": true,
 		"moduleDetection": "force",
@@ -18,8 +17,9 @@
 		/* Linting */
 		"erasableSyntaxOnly": true,
 		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
 		"noImplicitReturns": true,
-		"noUncheckedSideEffectImports": true,
+		"noUncheckedIndexedAccess": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true
 	},
