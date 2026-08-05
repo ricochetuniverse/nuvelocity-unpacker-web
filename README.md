@@ -49,3 +49,7 @@ npm run tsc -- -b
 npm run lint
 npm run prettier -- -c
 ```
+
+## License
+
+Licensed under the [MPL 2.0 License](https://www.mozilla.org/en-US/MPL/2.0/).
