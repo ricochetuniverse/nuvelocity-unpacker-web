@@ -1,54 +1,12 @@
 # nuvelocity-unpacker-web
 
-Fork of [NuVelocity.Unpacker](https://github.com/frankwilco/NuVelocity.Unpacker) running on the web using WebAssembly.
+Fork of [NuVelocity.Unpacker](https://github.com/frankwilco/NuVelocity.Unpacker) running on the web using [WebAssembly](https://webassembly.org).
 
 [View live website: https://ricochetuniverse.github.io/nuvelocity-unpacker-web/](https://ricochetuniverse.github.io/nuvelocity-unpacker-web/)
 
-## Development
+## Contributing
 
-[Install .NET 9.0 SDK](https://dotnet.microsoft.com/en-us/download).
-
-Install the .NET workload:
-
-```sh
-dotnet workload install wasm-tools-net8
-```
-
-Compile the .NET app:
-
-```sh
-rm -rf web/public/dotnet/
-dotnet publish -c Debug src/
-```
-
-Then run the React web app:
-
-```sh
-cd web
-npm install
-npm run dev
-```
-
-## Build for production
-
-```sh
-rm -rf web/public/dotnet/
-dotnet publish -c Release src/
-
-cd web
-npm run build
-```
-
-## Testing
-
-```sh
-dotnet test -c Debug UnpackerTests/
-
-cd web
-npm run tsc -- -b
-npm run lint
-npm run prettier -- -c
-```
+[Check out CONTRIBUTING.md for the full guide!](https://github.com/ricochetuniverse/nuvelocity-unpacker-web/blob/master/CONTRIBUTING.md)
 
 ## License
 
