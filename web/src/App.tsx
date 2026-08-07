@@ -72,12 +72,19 @@ export default function App() {
 
 	return (
 		<div>
-			<h1>
-				nuvelocity-unpacker-web{' '}
+			<h1>nuvelocity-unpacker-web</h1>
+
+			<p>
+				This is now integrated to the{' '}
+				<a href="https://www.ricochetuniverse.com/decompressor">
+					Ricochet Universe decompressor
+				</a>{' '}
+				which detects more file types and better error handling, this page is
+				for testing in isolation.{' '}
 				<a href="https://github.com/ricochetuniverse/nuvelocity-unpacker-web">
-					(view source code on GitHub)
+					View source code on GitHub.
 				</a>
-			</h1>
+			</p>
 
 			<div>
 				<input type="file" onChange={onFileChange} />
