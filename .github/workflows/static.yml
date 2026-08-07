@@ -31,10 +31,10 @@ jobs:
           submodules: true
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@9a946fdbd5fb07b82b2f5a4466058b876ab72bb2 # https://github.com/actions/setup-dotnet/releases/tag/v5.3.0
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # https://github.com/actions/setup-dotnet/releases/tag/v6.0.0
         with:
-          dotnet-version: '9.0'
-          workloads: wasm-tools-net8
+          dotnet-version: '10.0'
+          workloads: wasm-tools
 
       - name: Publish .NET app
         run: dotnet publish -c Release src/

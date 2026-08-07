@@ -2,12 +2,12 @@
 
 ## Development
 
-First, [install .NET 9.0 SDK](https://dotnet.microsoft.com/en-us/download) and [Node.js v24+](https://nodejs.org).
+First, [install .NET 10.0 SDK](https://dotnet.microsoft.com/en-us/download) and [Node.js v24+](https://nodejs.org).
 
 Install the .NET workload:
 
 ```sh
-dotnet workload install wasm-tools-net8
+dotnet workload install wasm-tools
 ```
 
 Compile the .NET app first:
