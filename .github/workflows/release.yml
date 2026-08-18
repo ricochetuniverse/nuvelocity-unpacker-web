@@ -3,7 +3,7 @@ name: Create GitHub release and publish to npm
 on:
   push:
     tags:
-      - "v*.*.*"
+      - 'v*.*.*'
 
 permissions:
   contents: write

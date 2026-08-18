@@ -1,10 +1,12 @@
 {
   "name": "nuvelocity-unpacker-web",
+  "private": true,
   "homepage": "https://github.com/ricochetuniverse/nuvelocity-unpacker-web",
   "bugs": {
     "url": "https://github.com/ricochetuniverse/nuvelocity-unpacker-web/issues",
     "email": "ngyikp@gmail.com"
   },
+  "license": "MPL-2.0",
   "author": {
     "name": "Ng Yik Phang (ngyikp)",
     "email": "ngyikp@gmail.com",
@@ -14,17 +16,12 @@
     "type": "git",
     "url": "git+https://github.com/ricochetuniverse/nuvelocity-unpacker-web.git"
   },
-  "private": true,
-  "license": "MPL-2.0",
-  "engines": {
-    "node": ">=24"
-  },
   "type": "module",
   "scripts": {
     "build": "node prebuild.ts && vite build",
     "dev": "vite",
+    "format": "oxfmt",
     "lint": "eslint .",
-    "prettier": "prettier .",
     "preview": "vite preview",
     "start": "vite",
     "tsc": "tsc"
@@ -43,9 +40,12 @@
     "eslint": "10.8.0",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.3",
-    "prettier": "3.9.6",
+    "oxfmt": "0.64.0",
     "typescript": "npm:@typescript/typescript6@6.0.3",
     "typescript-eslint": "8.66.0",
     "vite": "8.2.1"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

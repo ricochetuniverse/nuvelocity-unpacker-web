@@ -22,6 +22,6 @@ export default defineConfig(
 		files: ['**/*.{js,ts,tsx}'],
 	},
 	{
-		ignores: ['dist', 'public/dotnet/'],
+		ignores: ['dist/', 'public/dotnet/'],
 	},
 );

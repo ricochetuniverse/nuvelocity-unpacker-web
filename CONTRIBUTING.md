@@ -38,7 +38,7 @@ npm run preview # go to http://localhost:4173
 
 ### Code style
 
-Use [Prettier](https://prettier.io). Run `npm run prettier -- --write` to auto-fix.
+Use [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) (previously used [Prettier](https://prettier.io)). Run `npm run format` to auto-fix.
 
 ### Type-checking
 
@@ -57,5 +57,5 @@ Use [ESLint](https://eslint.org). Run `npm run lint` to see errors.
 The test suites are run on every push, it's best to run them on your system to avoid CI failures afterwards:
 
 ```bash
-npm run tsc -- -b && npm run lint && npm run prettier -- -c
+npm run tsc -- -b && npm run lint && npm run format -- --check
 ```
