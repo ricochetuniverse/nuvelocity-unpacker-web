@@ -4,7 +4,7 @@
 		"target": "ES2023",
 		"module": "ESNext",
 		"lib": ["ES2023"],
-		"types": ["node"],
+		"types": [],
 		"skipLibCheck": true,
 		"checkJs": true,
 

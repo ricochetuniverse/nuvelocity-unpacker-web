@@ -51,3 +51,11 @@ Use [ESLint](https://eslint.org). Run `npm run lint` to see errors.
 ### Testing
 
 - .NET: Run `dotnet test -c Release UnpackerTests/`
+
+### Running all tests
+
+The test suites are run on every push, it's best to run them on your system to avoid CI failures afterwards:
+
+```bash
+npm run tsc -- -b && npm run lint && npm run prettier -- -c
+```

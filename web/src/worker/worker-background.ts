@@ -13,7 +13,7 @@ let dotNet: AppExports | null = null;
 async function loadAssembly<AppExports>(loaderUrl: string) {
 	const module = (await import(
 		/* @vite-ignore */ loaderUrl
-	)) as typeof import('../../public/dotnet/wwwroot/_framework/dotnet.js');
+	)) as typeof import('../../public/dotnet/wwwroot/_framework/dotnet');
 
 	const {
 		// eslint-disable-next-line @typescript-eslint/unbound-method
